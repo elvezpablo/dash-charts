@@ -1,13 +1,11 @@
 import { scaleLinear, scaleTime } from '@visx/scale';
 import { LinePath, Circle } from '@visx/shape';
 import { AxisLeft, AxisBottom } from '@visx/axis';
-import { Tooltip } from '@visx/tooltip';
-import { max, minIndex, maxIndex } from '@visx/vendor/d3-array';
 
-export interface DataPoint {
-  date: Date;
-  value: number;
-}
+import { minIndex, maxIndex } from '@visx/vendor/d3-array';
+import { DataPoint } from '../data/types';
+
+
 
 interface LineChartProps {
   data: DataPoint[];
@@ -22,7 +20,7 @@ const LineChart = ({ data }: LineChartProps) => {
     height: height - margin.top - margin.bottom,
   };
 
-  const dates = data.map((d) => new Date(d.date));
+  const dates = data.map((d) => d.date);
 
   const xScale = scaleTime({
     domain: [dates[0], dates[dates.length - 1]],
@@ -43,18 +41,27 @@ const LineChart = ({ data }: LineChartProps) => {
         top={height - margin.bottom}
         left={margin.left}
         label="Time"
+        tickFormat={(value) => value.toString()}
+        tickComponent={(p) => {
+          console.log(p.formattedValue)
+          return (
+            <text x={p.x} y={p.y} className='text-white text-sm fill-white'>
+              {p.formattedValue}
+            </text>
+          )
+        }}
         hideZero
       />
       <LinePath
         data={data}
-        x={(d) => xScale(new Date(d.date)) + margin.left}
+        x={(d) => xScale(d.date) + margin.left}
         y={(d) => yScale(d.value) + margin.top}
         stroke="blue"
         strokeWidth={2}
       />
       {min && (
         <Circle
-          cx={xScale(new Date(data[min].date)) + margin.left}
+          cx={xScale(data[min].date) + margin.left}
           cy={yScale(data[min].value) + margin.top}
           r={5}
           fill="red"
@@ -62,7 +69,7 @@ const LineChart = ({ data }: LineChartProps) => {
       )}
       {max && (
         <Circle
-          cx={xScale(new Date(data[max].date)) + margin.left}
+          cx={xScale(data[max].date) + margin.left}
           cy={yScale(data[max].value) + margin.top}
           r={5}
           fill="blue"
@@ -70,14 +77,14 @@ const LineChart = ({ data }: LineChartProps) => {
       )}
       {/* <Tooltip
         top={yScale(data[0].value)}
-        left={xScale(new Date(data[0].date))}
+        left={xScale(data[0].date))}
         offsetLeft={10}
       >
         {`Highest Value: ${data[0].value}`}
       </Tooltip>
       <Tooltip
         top={yScale(data[data.length - 1].value)}
-        left={xScale(new Date(data[data.length - 1].date))}
+        left={xScale(data[data.length - 1].date))}
         offsetLeft={10}
       >
         {`Lowest Value: ${data[data.length - 1].value}`}

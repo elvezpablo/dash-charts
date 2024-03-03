@@ -1,13 +1,24 @@
+import { useAtomValue } from 'jotai';
 import LineChart from './charts/LineChart';
-import small from './data/small.json';
+import { chartAtom } from './state/appAtom';
+
 
 function App() {
+  const charts = useAtomValue(chartAtom)
   return (
     <div className="container px-4">
-      <header className="text-xl">Sparkline</header>
-      <div className="text-gray-400 text-sm">Controls</div>
+      <header className="text-xl">Charts</header>
 
-      <LineChart data={small} />
+      <div className="text-gray-400 text-sm">Controls</div>
+      {
+        charts.map(c => (
+          <div key={c.name}>
+            <div className="text">{c.name}</div>
+            <LineChart data={c.data} />
+          </div>
+        ))
+      }
+
     </div>
   );
 }

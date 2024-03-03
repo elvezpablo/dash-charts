@@ -16,6 +16,7 @@
     "@visx/text": "^3.3.0",
     "@visx/tooltip": "^3.3.0",
     "@visx/vendor": "^3.5.0",
+    "jotai": "^2.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
