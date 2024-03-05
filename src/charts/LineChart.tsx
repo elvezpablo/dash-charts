@@ -1,6 +1,9 @@
 import { scaleLinear, scaleTime } from '@visx/scale';
 import { LinePath, Circle } from '@visx/shape';
+import { Text } from '@visx/text';
+import { curveCatmullRom } from '@visx/curve';
 import { AxisLeft, AxisBottom } from '@visx/axis';
+import { format, isValid } from "date-fns"
 
 import { minIndex, maxIndex } from '@visx/vendor/d3-array';
 import { DataPoint } from '../data/types';
@@ -41,22 +44,28 @@ const LineChart = ({ data }: LineChartProps) => {
         top={height - margin.bottom}
         left={margin.left}
         label="Time"
-        tickFormat={(value) => value.toString()}
+        tickFormat={(value) => {
+          console.log(value)
+          return format(value as Date, "hh:mm");
+        }}
         tickComponent={(p) => {
           console.log(p.formattedValue)
           return (
-            <text x={p.x} y={p.y} className='text-white text-sm fill-white'>
+            <Text x={p.x - 3} y={p.y + 3}
+              textAnchor='middle'
+              className='text-xs fill-gray-500'>
               {p.formattedValue}
-            </text>
+            </Text>
           )
         }}
         hideZero
       />
       <LinePath
+        curve={curveCatmullRom}
         data={data}
         x={(d) => xScale(d.date) + margin.left}
         y={(d) => yScale(d.value) + margin.top}
-        stroke="blue"
+        stroke="#cc660099"
         strokeWidth={2}
       />
       {min && (

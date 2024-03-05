@@ -1,6 +1,7 @@
 import { useAtomValue } from 'jotai';
 import LineChart from './charts/LineChart';
 import { chartAtom } from './state/appAtom';
+import Notes from './components/Notes';
 
 
 function App() {
@@ -19,7 +20,9 @@ function App() {
         ))
       }
 
+      <Notes />
     </div>
+
   );
 }
 
