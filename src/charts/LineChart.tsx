@@ -81,7 +81,7 @@ const LineChart = ({ data }: LineChartProps) => {
           cx={xScale(data[max].date) + margin.left}
           cy={yScale(data[max].value) + margin.top}
           r={5}
-          fill="blue"
+          fill="green"
         />
       )}
       {/* <Tooltip
